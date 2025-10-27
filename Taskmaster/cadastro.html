@@ -4,17 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TaskMaster - Cadastro</title>   
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="style.css">
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
 
 </head>
 <body>
-    <button class="back-btn" onclick="goToLogin()">←</button>
-    
+    <button id="btnVoltar">←</button>
     <div class="signup-container">
         <div class="header-section">
-            <div class="logo">📋</div>
+            <div class="logo"></div>
             <h1 class="page-title">Criar Conta</h1>
             <p class="page-subtitle">Junte-se a milhares de usuários organizados</p>
         </div>
@@ -27,7 +26,7 @@
                         type="text" 
                         id="firstName" 
                         class="form-input" 
-                        placeholder="João"
+                        placeholder="Nome"
                         required
                     >
                     <div class="error-message">Nome é obrigatório</div>
@@ -39,7 +38,7 @@
                         type="text" 
                         id="lastName" 
                         class="form-input" 
-                        placeholder="Silva"
+                        placeholder="Sobrenome"
                         required
                     >
                     <div class="error-message">Sobrenome é obrigatório</div>
@@ -52,7 +51,7 @@
                     type="email" 
                     id="email" 
                     class="form-input" 
-                    placeholder="joao@exemplo.com"
+                    placeholder="seuemail@exemplo.com"
                     required
                 >
                 <div class="success-message">E-mail disponível! ✓</div>
@@ -70,6 +69,7 @@
                         required
                     >
                     <button type="button" class="password-toggle" onclick="togglePassword('password')">👁️</button>
+
                 </div>
                 <div class="password-strength">
                     <div class="strength-bar">
@@ -93,37 +93,20 @@
                 </div>
                 <div class="success-message">Senhas coincidem ✓</div>
                 <div class="error-message">As senhas não coincidem</div>
-            </div>
-            
-            <div class="terms-section">
-                <div class="checkbox-container">
-                    <input type="checkbox" id="terms" class="checkbox" required>
-                    <label for="terms" class="checkbox-label">
-                        Eu concordo com os <a href="#" onclick="alert('Termos em desenvolvimento')">Termos de Uso</a> e <a href="#" onclick="alert('Política em desenvolvimento')">Política de Privacidade</a>
-                    </label>
-                </div>
-                
-                <div class="checkbox-container">
-                    <input type="checkbox" id="newsletter" class="checkbox">
-                    <label for="newsletter" class="checkbox-label">
-                        Quero receber dicas de produtividade e novidades por e-mail
-                    </label>
-                </div>
-            </div>
-            
+            </div>           
             <button type="submit" class="signup-btn" id="signupBtn">
                 <div class="loading-spinner"></div>
-                <span class="btn-text">Criar Conta Gratuita</span>
+                <span class="btn-text">Criar Conta</span>
             </button>
         </form>
         
       
-        </div>
-        </div>
+        
+    </div>
         
         <div class="login-section">
             <span class="login-text">Já tem uma conta?</span>
-            <a href="#" class="login-link" onclick="goToLogin()">Fazer login</a>
+            <a href="login.html" class="login-link">Fazer login</a>
         </div>
     </div>
     <script src="firebase.js"></script>
