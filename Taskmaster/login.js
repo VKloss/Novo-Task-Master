@@ -1,3 +1,5 @@
+import { auth } from './firebase.js';
+
 const emailInput = document.getElementById('email');
         const passwordInput = document.getElementById('password');
         const loginForm = document.getElementById('loginForm');
@@ -87,6 +89,7 @@ const emailInput = document.getElementById('email');
             }
             
             // Opção 2: Navegação tradicional
+            
            window.location.href = "cadastro.html";
         
         }
@@ -95,3 +98,7 @@ const emailInput = document.getElementById('email');
         window.goToLogin = function() {
             alert('Já estamos na tela de login!');
         };
+
+document.getElementById('signup-btn').addEventListener('click', function() {
+     window.location.href = 'cadastro.html';
+});
