@@ -368,7 +368,7 @@
                         placeholder="••••••••"
                         required
                     >
-                    <button type="button" class="password-toggle" onclick="togglePassword()">👁️</button>
+                    <button type="button" id="toggleBtn" class="password-toggle" onclick="togglePassword()">👁️</button>
                 </div>
                 <div class="error-message">A senha deve ter pelo menos 6 caracteres</div>
             </div>
@@ -389,12 +389,13 @@
         
         <div class="divider">  
         <div class="signup-section">
-            <p class="signup-text">Novo no TaskMaster?</p>
             <a href="#" id="signup-btn" onclick="goToSignup()">Criar conta gratuita</a>
         </div>
     </div>
-    <script src="firebase.js"></script>
-    <script src="login.js"></script>
-
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+    <script type="module" src="firebase.js"></script>
+    <script type="module" src="login.js"></script>
 </body>
 </html>
