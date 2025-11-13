@@ -1,14 +1,13 @@
-/* ====== RESET ====== */
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
   }
   
-  /* ====== BODY ====== */
   body {
     font-family: "Inter", "Segoe UI", Roboto, sans-serif;
-    background: linear-gradient(135deg, #4e54c8 0%, #8f94fb 100%);
+    background: linear-gradient(135deg, #021670 0%, #30025f 100%);
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -17,7 +16,7 @@
     color: #222;
   }
   
-  /* ====== CONTAINER ====== */
+
   .signup-container {
     background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(16px);
@@ -33,7 +32,7 @@
     position: relative;
   }
   
-  /* ====== ANIMAÇÃO ====== */
+
   @keyframes slideUp {
     from {
       opacity: 0;
@@ -45,7 +44,7 @@
     }
   }
   
-  /* ====== HEADER ====== */
+
   .header-section {
     text-align: center;
     margin-bottom: 32px;
@@ -78,7 +77,7 @@
     margin-top: 4px;
   }
   
-  /* ====== BOTÃO VOLTAR ====== */
+
   .btnVoltar {
     position: fixed;
     top: 24px;
@@ -104,7 +103,7 @@
     transform: translateY(-2px);
   }
   
-  /* ====== FORM ====== */
+
   .form-group {
     margin-bottom: 20px;
     position: relative;
@@ -374,7 +373,7 @@
     text-decoration: underline;
   }
   
-  /* ====== RESPONSIVIDADE ====== */
+
   @media (max-width: 480px) {
     .signup-container {
       padding: 28px 22px;

@@ -6,12 +6,16 @@ const firebaseConfig = {
     storageBucket: "taskmaster-19436.firebasestorage.app",
     messagingSenderId: "26527596417",
     appId: "1:26527596417:web:0971755a9bfa9772357280"
-
-};
-
-firebase.initializeApp(firebaseConfig);
-
-const auth = firebase.auth();
-const db = firebase.database();
-
-export { auth, db };
+  };
+  
+  // Inicializa o Firebase
+  firebase.initializeApp(firebaseConfig);
+  
+  // Cria as variáveis globais
+  const auth = firebase.auth();
+  const db = firebase.database();
+  
+  // Deixa acessível em outros arquivos
+  window.auth = auth;
+  window.db = db;
+  

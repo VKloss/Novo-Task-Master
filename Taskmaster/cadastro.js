@@ -6,7 +6,7 @@ function cadastrar(event) {
   const email = document.getElementById('email').value.trim();
   const password = document.getElementById('password').value.trim();
 
-  // Verifica se os campos estão preenchidos
+
   if (!firstname || !lastname || !email || !password) {
     alert("Por favor, preencha todos os campos.");
     return;
@@ -20,15 +20,16 @@ function cadastrar(event) {
       return db.ref('usuarios/' + user.uid).set({
         firstname,
         lastname,
-        email
+        email,
+        password
       });
     })
     .then(() => {
-      alert("Conta criada com sucesso! 🎉");
-      window.location.href = "login.html"; // Redireciona para a tela de login
+
+      window.location.href = "login.html"; 
     })
     .catch(error => {
-      alert("Erro ao cadastrar: " + error.message); // Exibe mensagem de erro
+      alert("Erro ao cadastrar: " + error.message); 
     });
 }
 

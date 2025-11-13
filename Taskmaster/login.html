@@ -332,7 +332,7 @@
             .logo {
                 width: 70px;
                 height: 70px;
-                font-size: 28px;
+                font-size: 28px;      
             }
         }
     </style>
@@ -365,29 +365,20 @@
                         type="password" 
                         id="password" 
                         class="form-input" 
-                        placeholder="••••••••"
+                        placeholder="Digite sua senha"
                         required
                     >
                     <button type="button" id="toggleBtn" class="password-toggle" onclick="togglePassword()">👁️</button>
                 </div>
                 <div class="error-message">A senha deve ter pelo menos 6 caracteres</div>
             </div>
-            
-            <div class="form-options">
-                <div class="checkbox-container">
-                    <input type="checkbox" id="remember" class="checkbox">
-                    <label for="remember" class="checkbox-label">Lembrar-me</label>
-                </div>
-                <a href="#" class="forgot-password">Esqueceu a senha?</a>
-            </div>
-            
+        
             <button type="submit" class="login-btn" id="loginBtn">
                 <div class="loading-spinner"></div>
                 <span class="btn-text">Entrar</span>
             </button>
         </form>
-        
-        <div class="divider">  
+
         <div class="signup-section">
             <a href="#" id="signup-btn" onclick="goToSignup()">Criar conta gratuita</a>
         </div>
@@ -395,7 +386,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
-    <script type="module" src="firebase.js"></script>
-    <script type="module" src="login.js"></script>
+    <script src="firebase.js"></script>
+    <script src="login.js"></script>
 </body>
 </html>

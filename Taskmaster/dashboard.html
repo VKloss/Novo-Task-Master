@@ -13,7 +13,7 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #021670 0%, #30025f 100%);
             min-height: 100vh;
             color: #333;
         }
@@ -582,6 +582,14 @@
             <div class="calendar" id="calendar"></div>
         </div>
     </div>
+   
+     <div class="section">
+        <h2>🤖 Assistente Pessoal</h2>
+        <textarea id="userPrompt" placeholder="Pergunte algo, ex: 'resuma minhas tarefas de hoje'"></textarea>
+        <button class="btn btn-primary" onclick="askAI()">Enviar</button>
+        <div id="aiResponse" style="margin-top: 1rem; white-space: pre-line;"></div>
+    </div>
+</div>
 
     <!-- Modal para Tarefa -->
     <div id="taskModal" class="modal">
