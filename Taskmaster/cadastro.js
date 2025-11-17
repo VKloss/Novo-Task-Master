@@ -33,8 +33,6 @@ function cadastrar(event) {
     });
 }
 
-// Event listener para o formulário de cadastro
-document.getElementById('signupForm').addEventListener('submit', cadastrar);
 
 // Botão "Voltar" para a tela de login
 document.getElementById('btnVoltar').addEventListener('click', function() {
