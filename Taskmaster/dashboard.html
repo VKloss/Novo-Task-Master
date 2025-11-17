@@ -30,7 +30,7 @@
         }
 
         header h1 {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #4723e7 0%, #3a3a3b 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -300,6 +300,18 @@
             font-weight: 500;
         }
 
+        .task-red {
+            background-color: #ffb3b3 !important;
+        }
+
+        .task-yellow {
+            background-color: #fff7b3 !important;
+        }
+
+        .task-green {
+            background-color: #c9ffc9 !important;
+        }
+
         .calendar-day:hover {
             background: #667eea;
             color: white;
@@ -308,7 +320,7 @@
         }
 
         .calendar-day.today {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #ea6666 0%, #af3131 100%);
             color: white;
             border-color: #667eea;
             font-weight: 700;
@@ -547,10 +559,10 @@
 </head>
 <body>
     <header>
-        <h1>📋 TaskMaster</h1>
+        <h1>TaskMaster</h1>
         <div class="user-info">
-            <span id="userName">Olá, Usuário!</span>
-            <button class="logout-btn" onclick="logout()">🚪 Logout</button>
+            <p>Olá, <span id="userName"></span>!</p>
+            <button class="logout-btn" onclick="logout()">Fazer Logout</button>
         </div>
     </header>
 
@@ -652,271 +664,18 @@
         </div>
     </div>
 
-    <!-- Toast para notificações -->
-    <div id="toast" class="toast"></div>
+    <div id="dayModal" class="modal">
+        <div class="modal-content">
+          <h2 id="dayModalTitle">Tarefas do dia</h2>
+          <div id="dayModalContent"></div>
+          <button class="btn btn-secondary" onclick="closeModal('dayModal')">Fechar</button>
+        </div>
+    </div>
 
-    <script>
-        // Dados simulados (localStorage para persistência)
-        let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-        let events = JSON.parse(localStorage.getItem('events')) || {};
-        let editingTaskIndex = null;
-
-        // Função auxiliar para formatar data
-        function formatDate(dateStr) {
-            if (!dateStr) return 'Sem data';
-            const date = new Date(dateStr + 'T00:00:00');
-            return date.toLocaleDateString('pt-BR');
-        }
-
-        // Função para verificar se é amanhã
-        function isTomorrow(dateStr) {
-            if (!dateStr) return false;
-            const taskDate = new Date(dateStr + 'T00:00:00');
-            const tomorrow = new Date();
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            return taskDate.toDateString() === tomorrow.toDateString();
-        }
-
-        // Função para verificar se é hoje
-        function isToday(dateStr) {
-            if (!dateStr) return false;
-            const taskDate = new Date(dateStr + 'T00:00:00');
-            const today = new Date();
-            return taskDate.toDateString() === today.toDateString();
-        }
-
-        // Carregar tarefas
-        function loadTasks() {
-            const taskList = document.getElementById('taskList');
-            taskList.innerHTML = '';
-            
-            if (tasks.length === 0) {
-                taskList.innerHTML = `
-                    <div class="empty-state">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M9 11l3 3L22 4"></path>
-                            <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"></path>
-                        </svg>
-                        <p>Nenhuma tarefa ainda. Crie uma nova!</p>
-                    </div>
-                `;
-                return;
-            }
-
-            tasks.forEach((task, index) => {
-                const li = document.createElement('li');
-                const classes = ['task-item'];
-                if (task.completed) classes.push('completed');
-                if (task.priority === 'high') classes.push('priority-high');
-                if (task.priority === 'low') classes.push('priority-low');
-                if (isTomorrow(task.date) && !task.completed) classes.push('tomorrow');
-                
-                li.className = classes.join(' ');
-                
-                const priorityBadge = task.priority === 'high' 
-                    ? '<span class="priority-badge high">🔴 Alta</span>'
-                    : '<span class="priority-badge low">🟡 Baixa</span>';
-                
-                const tomorrowWarning = isTomorrow(task.date) && !task.completed
-                    ? '<span style="font-weight: 700;">⚠️ AMANHÃ!</span>'
-                    : '';
-                
-                li.innerHTML = `
-                    <div>
-                        <div class="task-header">
-                            <div class="task-title">${task.title}</div>
-                            ${priorityBadge}
-                        </div>
-                        ${task.desc ? `<div class="task-desc">${task.desc}</div>` : ''}
-                        <div class="task-meta">
-                            <span>📅 ${formatDate(task.date)}</span>
-                            ${tomorrowWarning}
-                        </div>
-                        <div class="task-actions">
-                            <button class="btn btn-success btn-small" onclick="toggleComplete(${index})">
-                                ${task.completed ? '↩️ Desmarcar' : '✓ Concluir'}
-                            </button>
-                            <button class="btn btn-secondary btn-small" onclick="editTask(${index})">✏️ Editar</button>
-                            <button class="btn btn-danger btn-small" onclick="deleteTask(${index})">🗑️ Excluir</button>
-                        </div>
-                    </div>
-                `;
-                taskList.appendChild(li);
-            });
-            localStorage.setItem('tasks', JSON.stringify(tasks));
-        }
-
-        // Carregar calendário
-        function loadCalendar() {
-            const calendar = document.getElementById('calendar');
-            calendar.innerHTML = '';
-            const today = new Date();
-            const year = today.getFullYear();
-            const month = today.getMonth();
-            const firstDay = new Date(year, month, 1).getDay();
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
-            
-            // Adicionar dias vazios no início
-            for (let i = 0; i < firstDay; i++) {
-                const empty = document.createElement('div');
-                calendar.appendChild(empty);
-            }
-            
-            // Adicionar dias do mês
-            for (let day = 1; day <= daysInMonth; day++) {
-                const dayStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                const div = document.createElement('div');
-                const classes = ['calendar-day'];
-                
-                // Verificar se tem tarefas para amanhã
-                const hasTomorrowTask = tasks.some(task => 
-                    isTomorrow(task.date) && !task.completed && dayStr === task.date
-                );
-                
-                if (isToday(dayStr)) classes.push('today');
-                if (events[dayStr]) classes.push('event');
-                if (hasTomorrowTask) classes.push('tomorrow-task');
-                
-                div.className = classes.join(' ');
-                
-                let indicators = [];
-                if (events[dayStr]) indicators.push('📌');
-                if (hasTomorrowTask) indicators.push('⚠️');
-                
-                div.innerHTML = `
-                    <div class="calendar-day-number">${day}</div>
-                    ${indicators.length > 0 ? `<div class="calendar-day-indicator">${indicators.join(' ')}</div>` : ''}
-                `;
-                
-                div.onclick = () => {
-                    document.getElementById('eventDate').value = dayStr;
-                    openEventModal();
-                };
-                calendar.appendChild(div);
-            }
-        }
-
-        // Adicionar/Editar tarefa
-        document.getElementById('taskForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const title = document.getElementById('taskTitle').value;
-            const desc = document.getElementById('taskDesc').value;
-            const date = document.getElementById('taskDate').value;
-            const priority = document.getElementById('taskPriority').value;
-            
-            if (editingTaskIndex !== null) {
-                tasks[editingTaskIndex] = { 
-                    title, 
-                    desc, 
-                    date, 
-                    priority,
-                    completed: tasks[editingTaskIndex].completed 
-                };
-                showToast('✅ Tarefa atualizada com sucesso!');
-            } else {
-                tasks.push({ title, desc, date, priority, completed: false });
-                showToast('✅ Tarefa criada com sucesso!');
-            }
-            
-            loadTasks();
-            loadCalendar();
-            closeModal('taskModal');
-            resetTaskForm();
-        });
-
-        // Editar tarefa
-        function editTask(index) {
-            const task = tasks[index];
-            document.getElementById('taskTitle').value = task.title;
-            document.getElementById('taskDesc').value = task.desc || '';
-            document.getElementById('taskDate').value = task.date || '';
-            document.getElementById('taskPriority').value = task.priority || 'low';
-            editingTaskIndex = index;
-            document.getElementById('taskModalTitle').textContent = '✏️ Editar Tarefa';
-            openTaskModal();
-        }
-
-        // Excluir tarefa
-        function deleteTask(index) {
-            if (confirm('Tem certeza que deseja excluir esta tarefa?')) {
-                tasks.splice(index, 1);
-                loadTasks();
-                loadCalendar();
-                showToast('🗑️ Tarefa excluída!');
-            }
-        }
-
-        // Marcar como concluída
-        function toggleComplete(index) {
-            tasks[index].completed = !tasks[index].completed;
-            loadTasks();
-            loadCalendar();
-            showToast(tasks[index].completed ? '✅ Tarefa concluída!' : '↩️ Tarefa desmarcada!');
-        }
-
-        // Adicionar evento
-        document.getElementById('eventForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const title = document.getElementById('eventTitle').value;
-            const date = document.getElementById('eventDate').value;
-            events[date] = title;
-            localStorage.setItem('events', JSON.stringify(events));
-            loadCalendar();
-            showToast('📅 Evento criado com sucesso!');
-            closeModal('eventModal');
-            document.getElementById('eventForm').reset();
-        });
-
-        // Modais
-        function openTaskModal() {
-            document.getElementById('taskModal').classList.add('show');
-        }
-
-        function openEventModal() {
-            document.getElementById('eventModal').classList.add('show');
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.remove('show');
-            if (modalId === 'taskModal') resetTaskForm();
-        }
-
-        function resetTaskForm() {
-            document.getElementById('taskForm').reset();
-            editingTaskIndex = null;
-            document.getElementById('taskModalTitle').textContent = '✨ Nova Tarefa';
-        }
-
-        // Toast
-        function showToast(message, isError = false) {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.className = 'toast show' + (isError ? ' error' : '');
-            setTimeout(() => toast.classList.remove('show'), 3000);
-        }
-
-        // Logout
-        function logout() {
-            if (confirm('Deseja realmente fazer logout?')) {
-                showToast('👋 Até logo!');
-                setTimeout(() => {
-                    window.location.href = 'login.html';
-                }, 1000);
-            }
-        }
-
-        // Fechar modal clicando fora
-        document.querySelectorAll('.modal').forEach(modal => {
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    closeModal(modal.id);
-                }
-            });
-        });
-
-        // Inicializar
-        loadTasks();
-        loadCalendar();
-    </script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script src="firebase.js"></script>
+    <script src="dashboard.js"></script>
 </body>
 </html>
